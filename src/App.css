@@ -12,18 +12,62 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+  button {
+    height: 20px;
+    width: 100px;
+    font-size: 16px;
+  }
+}
+
+/* Media query for even smaller screens */
+@media screen and (max-width: 480px) {
+   button {
+    height: 16px;
+    width: 80px;
+    font-size: 14px;
+  }
+}
+.connect-button .hover-text {
+  display: none;
+  font-size: 20px;
+}
+.connect-button:hover{
+  background-color: #b00617 !important;
+}
+.connect-button:hover .hover-text {
+  display: flex;
+}
+.connect-button:hover span:first-child {
+  display: none;
+}
 
 .header {
   background-color: #7d0e0e;
   color: #333;
   border: none;
-  padding: 15px;
+  padding: 2px;
   align-items: center;
   display: flex;
   flex-wrap:wrap;
   justify-content: space-between;
-  flex-direction: row-reverse;
+  flex-direction: row;
  
+}
+.connect-wallet-text{
+  background-color:#23a45b ;
+  border-radius: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: 50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  top: 65%;
+  position: absolute;
+  width: 550px;
+  height:50px;
+  text-align: center;
 }
 
 .App:before {

@@ -3,64 +3,69 @@ import React, { useContext, useState } from 'react';
 import { MyContext } from './MyContext';
 
 export default function Connect() {
-  const {setMyBooleanVariable } = useContext(MyContext);
-  const [connectioninfo,setconnectioninfo] = useState('')
-  const [connect,setconnect] = useState('Connect Wallet')
 
-  const connectWallet = async () => {
-    const provider= (new ethers.providers.Web3Provider(window.ethereum));
+  const {setMyBooleanVariable } = useContext(MyContext);
+  const [connect,setconnect] = useState("Connect Wallet")
+  const [buttonColor, setButtonColor] = useState('#499bfa');
+
+  const provider= (new ethers.providers.Web3Provider(window.ethereum));
+  
+  const connectwallet = async () => {
+    setconnect('Connecting!');
+    setButtonColor('#b00617');
     if (window.ethereum) {
-      setconnect('Connecting')
-      const network = await provider.getNetwork()
       try {
-      if (network.chainId !== 11155111) {
-          await window.ethereum.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: '0xaa36a7' }], 
-          });
-      }
       const addresses = await window.ethereum.request({ method: 'eth_requestAccounts' })
       if(addresses.length!==0){
         setMyBooleanVariable(true);
-        setconnect('Disconnect')
+        setconnect('connected')
+        setButtonColor('#20c30e')
         }
     }
     catch(error)  {
       if (error.code === 4001) {
-        setconnectioninfo('Please connect to MetaMask. User rejected Connection');
         setconnect('Connect Wallet')
+        setButtonColor('#499bfa')
       }
       else{
-        setconnectioninfo(`Error: ${error.message}`);
         setconnect('Connect Wallet')
+        setButtonColor('#499bfa')
       }
      }
     }
     else {
-      setconnectioninfo('Please Install Metamask!!!');
       setconnect('Connect Wallet')
+      setButtonColor('#499bfa')
     }
   };
 
-  return (
-    <div style={{
-      display:'flex',
-      flexWrap:'wrap'
-    }}> 
-    <button style={{
-      height: '35px',
-      width: '150px',
-      backgroundColor: '#499bfa',
-      color: 'white',
-      fontSize: '20px',
-      border: 'none',
-      cursor: 'pointer',
-      margin: '0 auto',
-      borderRadius: '10px',
-      boxShadow: 'none',
-      color: '#fff',
-    
-    }} onClick={() => connectWallet()}>{connect}</button>
-    </div>);
-     
+ return (
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+      }}
+    >
+         <button
+         style={{
+          backgroundColor:buttonColor ,
+           height: '30px',
+           width: 'auto',
+           color: 'white',
+           fontSize: '20px',
+           border: 'none',
+           cursor: 'pointer',
+           margin: '0 auto',
+           borderRadius: '10px',
+           boxShadow: 'none',
+           fontFamily: 'fantasy',
+           marginRight:'7px'
+         }}
+         onClick={() => { connectwallet()}}>
+         {connect}   
+    </button>
+    </div>
+    );
+  
 }
