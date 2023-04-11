@@ -9,13 +9,12 @@ export default function Logo() {
       fontSize: '1.5rem',
       padding: '12px',
       color:'white',
-      '@media(max-width: 768px)': { // adjust styles for screens smaller than 768px
-      fontSize: '1.2rem',
-      padding: '5px'
-      }
+      fontFamily: 'MyCustomFont',
     }}>
       <img width='40px' src={logo} alt="Logo" />
       SantaFloki Staking
     </div>
+    
+    
   );
 }

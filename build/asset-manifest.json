@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.4547f7bb.css",
-    "main.js": "/static/js/main.ed1b724c.js",
+    "main.css": "/static/css/main.ef36be0e.css",
+    "main.js": "/static/js/main.e373d0b1.js",
+    "static/media/TTRounds-Black.otf": "/static/media/TTRounds-Black.0369e84177a167d56af4.otf",
     "static/media/header.png": "/static/media/header.22c6a9d7f5e5c2e67ec1.22c6a9d7f5e5c2e67ec1.png",
     "static/media/outline.png": "/static/media/outline.f2cbb8769b4ab9447105.f2cbb8769b4ab9447105.png",
     "index.html": "/index.html",
-    "main.4547f7bb.css.map": "/static/css/main.4547f7bb.css.map",
-    "main.ed1b724c.js.map": "/static/js/main.ed1b724c.js.map"
+    "main.ef36be0e.css.map": "/static/css/main.ef36be0e.css.map",
+    "main.e373d0b1.js.map": "/static/js/main.e373d0b1.js.map"
   },
   "entrypoints": [
-    "static/css/main.4547f7bb.css",
-    "static/js/main.ed1b724c.js"
+    "static/css/main.ef36be0e.css",
+    "static/js/main.e373d0b1.js"
   ]
 }

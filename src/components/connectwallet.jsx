@@ -51,7 +51,7 @@ export default function Connect() {
          style={{
           backgroundColor:buttonColor ,
            height: '30px',
-           width: 'auto',
+           width: 'max-content',
            color: 'white',
            fontSize: '20px',
            border: 'none',
@@ -59,7 +59,7 @@ export default function Connect() {
            margin: '0 auto',
            borderRadius: '10px',
            boxShadow: 'none',
-           fontFamily: 'fantasy',
+           fontFamily: 'myCustomFont',
            marginRight:'7px'
          }}
          onClick={() => { connectwallet()}}>

@@ -1,7 +1,18 @@
 import { ethers } from 'ethers';
 import React, { useContext, useState,useEffect } from 'react';
-import { MyContext } from './MyContext';
-
+import { Link } from 'react-router-dom';
 export default function Staking() {
-  const {myBooleanVariable,setMyBooleanVariable } = useContext(MyContext);
+  const [display,setDisplay ] = useState(true);
+
+  return(
+    <div>
+        <div className='linkcontainer'>
+          <div className='linktext'><Link to="/Nfts">NFTs</Link></div>
+          <div className='linktext'><Link to="/staked">Staked NFTs</Link></div>
+        </div>
+        <div>
+         
+        </div>
+    </div>
+  );
 }

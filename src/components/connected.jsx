@@ -46,13 +46,13 @@ export default function Connected() {
         width: '120px',
         backgroundColor: '#499bfa',
         color: 'white',
-        fontSize: '15px',
+        fontSize: '17px',
         border: 'none',
         cursor: 'pointer',
         margin: '0 auto',
         borderRadius: '10px',
         boxShadow: 'none',
-        fontFamily: 'fantasy',
+        fontFamily: 'MyCustomFont',
         marginRight:'5px',
         overflow:'hidden',
         whiteSpace:'nowrap',
@@ -66,7 +66,7 @@ export default function Connected() {
 }
       <button className='connect-button'
         style={{
-          height: '30px',
+          height: '32px',
           width: 'auto',
           backgroundColor:buttonColor ,
           color: 'white',
@@ -76,7 +76,7 @@ export default function Connected() {
           margin: '0 auto',
           borderRadius: '10px',
           boxShadow: 'none',
-          fontFamily: 'fantasy',
+          fontFamily: 'MyCustomFont',
           marginRight:'7px'
         }}
         onClick={() => { disconnect()}}

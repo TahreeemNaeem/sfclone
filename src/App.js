@@ -1,4 +1,5 @@
 import './App.css';
+import { BrowserRouter as Router, Route, Navigate,Routes } from 'react-router-dom';
 import React, { useEffect, useState} from 'react';
 import Connect from './components/connectWallet';
 import Logo from './components/HeaderLodo'
@@ -7,6 +8,8 @@ import { MyContext } from './components/MyContext';
 import Connected from './components/connected';
 import Staking from './components/Staking';
 import Mainpage from './components/mainPage';
+import Staked from './components/Staked.jsx';
+import Nfts from './components/Nfts.jsx';
 
 
 function App() {
@@ -61,13 +64,32 @@ function App() {
           {myBooleanVariable? <Connected/> : <Connect  />}
         </div>
         <div className='center-text'>
-          {myBooleanVariable? Display? <Staking/>:
+          {myBooleanVariable? Display? <Router>
+      <div>
+        < Staking/>
+        <Routes>
+        <Route
+                exact
+                path="/"
+                render={() => {
+                    return (
+                      myBooleanVariable &&
+                      <Navigate to="/Nfts" /> 
+                    )
+                }}
+              />
+        <Route path="/Staked" element={<Staked />} />
+          <Route path="/Nfts" element={<Nfts />}  />
+        </Routes>
+      </div>
+    </Router>:
           <h1 style={{
             fontSize:'calc(1.3rem + 1.3vw)',
             color:'white',
-            marginTop:'20px'
+            marginTop:'20px',
+            fontFamily: 'MyCustomFont',
           }}>
-            Incorrect Chain Please Connect To BSC Testnet
+            Incorrect Chain Please Connect To Sepolia Testnet
           </h1> : <Mainpage  />}
           </div>
       </div>
