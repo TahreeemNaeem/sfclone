@@ -64,20 +64,11 @@ function App() {
           {myBooleanVariable? <Connected/> : <Connect  />}
         </div>
         <div className='center-text'>
-          {myBooleanVariable? Display? <Router>
+          {myBooleanVariable? Display?
+       <Router>
       <div>
         < Staking/>
         <Routes>
-        <Route
-                exact
-                path="/"
-                render={() => {
-                    return (
-                      myBooleanVariable &&
-                      <Navigate to="/Nfts" /> 
-                    )
-                }}
-              />
         <Route path="/Staked" element={<Staked />} />
           <Route path="/Nfts" element={<Nfts />}  />
         </Routes>

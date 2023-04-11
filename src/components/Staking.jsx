@@ -10,9 +10,6 @@ export default function Staking() {
           <div className='linktext'><Link to="/Nfts">NFTs</Link></div>
           <div className='linktext'><Link to="/staked">Staked NFTs</Link></div>
         </div>
-        <div>
-         
-        </div>
     </div>
   );
 }
