@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Navigate,Routes } from 'react-router-dom';
 import React, { useEffect, useState} from 'react';
-import Connect from './components/connectWallet';
+import Connect from './components/wallet';
 import Logo from './components/HeaderLodo'
 import { ethers } from 'ethers';
 import { MyContext } from './components/MyContext'; 
