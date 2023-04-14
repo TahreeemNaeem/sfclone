@@ -44,7 +44,7 @@ export default function Mainpage() {
       <div className="line"></div>
 
       <div className='text'>
-        <h1>{(stakeCount*100/totalSupply).toFixed(3)}</h1>
+        <h1>{(stakeCount*100/totalSupply).toFixed(2)} %</h1>
         <h1
         style={{fontSize:'20px',paddingLeft:'5px',display:'inline-block',paddingTop:'10px'}}>of NFTs</h1>
         <h1 className='text1' >Staked</h1>
