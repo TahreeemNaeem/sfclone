@@ -15,7 +15,7 @@ import Nfts from './components/Nfts.jsx';
 function App() {
 
   const [Display, setDisplay] = useState();
-  const [ myBooleanVariable,setMyBooleanVariable ] = useState(false);
+  const [ myBooleanVariable,setMyBooleanVariable ] = useState();
 
   window.ethereum.on('disconnect', (error) => {
     setMyBooleanVariable(false);
@@ -54,6 +54,7 @@ function App() {
       });
 
     }
+    console.log('kkkkkkk')
    
   },);
   return (
@@ -65,15 +66,7 @@ function App() {
         </div>
         <div className='center-text'>
           {myBooleanVariable? Display?
-       <Router>
-      <div>
-        < Staking/>
-        <Routes>
-        <Route path="/Staked" element={<Staked />} />
-          <Route path="/Nfts" element={<Nfts />}  />
-        </Routes>
-      </div>
-    </Router>:
+           <Staking/>:
           <h1 style={{
             fontSize:'calc(1.3rem + 1.3vw)',
             color:'white',

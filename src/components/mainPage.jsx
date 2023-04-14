@@ -3,19 +3,22 @@ import React, { useContext, useState,useEffect } from 'react';
 import { MyContext } from './MyContext';
 import logo from '../assets/header.22c6a9d7f5e5c2e67ec1.png';
 import ABI from '../assets/stakingabi.json'
+import myNFTContrac from '../assets/myNFTContract.json'
 export default function Mainpage() {
   const {myBooleanVariable,setMyBooleanVariable } = useContext(MyContext);
   const [rewardReceived,setRewardReceived] = useState('')
   const [percent,setPercentage] = useState('')
   const [stakeCount,setStakeCount] = useState('')
+  const [totalSupply,settotalSupply] = useState();
   const provider= (new ethers.providers.Web3Provider(window.ethereum));
   const signer = provider.getSigner()
 
   const StakingContract =  new ethers.Contract('0xE0BD2f94907F34D94a09f3820d274a35BE5Eab4a', ABI, (provider.getSigner()));
+  const myNFTContract =  new ethers.Contract('0x82E74b814D1152317b9402918cF41BDdF1148599', myNFTContrac, (provider.getSigner())); 
   useEffect(() => {
     const stakecountpromise =  StakingContract.stakeCount();
     const rewardreceivedpromise =  StakingContract.totalRewardReceived();
-
+    const totalSupplypromise = myNFTContract.totalSupply();
     stakecountpromise.then((stakecount) => {
         setStakeCount(stakecount.toString());
     });
@@ -23,12 +26,16 @@ export default function Mainpage() {
         setRewardReceived((rewardreceived.toString()));
     });
 
+    totalSupplypromise.then((totalSupply) => {
+      settotalSupply((totalSupply.toString()));
+  });
+
      },);
   return(
     <div >
       <div className="text-with-line">
       <div className='text'>
-        <h1>{stakeCount} of 100</h1>
+        <h1>{stakeCount} of {totalSupply}</h1>
         <h1
         style={{fontSize:'20px',paddingLeft:'5px',display:'inline-block',paddingTop:'10px'}}>NFTs</h1>
         <h1 className='text1'>Staked</h1>
@@ -37,7 +44,7 @@ export default function Mainpage() {
       <div className="line"></div>
 
       <div className='text'>
-        <h1>{stakeCount*100/800}</h1>
+        <h1>{(stakeCount*100/totalSupply).toFixed(3)}</h1>
         <h1
         style={{fontSize:'20px',paddingLeft:'5px',display:'inline-block',paddingTop:'10px'}}>of NFTs</h1>
         <h1 className='text1' >Staked</h1>

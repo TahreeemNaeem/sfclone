@@ -13,8 +13,10 @@ export default function Nfts(){
   const [address,setAddress] = useState();
   const [tokencount,settokencount] = useState();
   const [approvedNfts, setApprovedNfts] = useState([]);
+
   
-  const myNFTContract =  new ethers.Contract('0x7d17E6348291ff3be3c580bAEF2Fd221f284ff3A', ABI, (provider.getSigner())); 
+  const myNFTContract =  new ethers.Contract('0x82E74b814D1152317b9402918cF41BDdF1148599', ABI, (provider.getSigner())); 
+  const stakingcontract =  new ethers.Contract('0xE0BD2f94907F34D94a09f3820d274a35BE5Eab4a', stakingabi, (provider.getSigner())); 
 
 
     async function approve(index){
@@ -25,36 +27,42 @@ export default function Nfts(){
        setApprovedNfts([...approvedNfts, index]);
     }
 
+    async function stake(index){
+      const id = nftIds[index];
+      console.log(id)
+      const staked =await stakingcontract.addStake(id,1);
+      staked.wait();
+   }
+   const alltokenidspromise = myNFTContract.allTokensOwned(address);
+   const tokencountpromise = myNFTContract.balanceOf(address);
+
     useEffect(() => {
       signer.getAddress().then((resolvedAddress) => {
         setAddress(resolvedAddress.toString());
       });
-
-      const alltokenidspromise = myNFTContract.allTokensOwned(provider.getSigner().getAddress());
-    
-      alltokenidspromise.then(async (tokenids) => {
-        const ids = tokenids.map((id) => id.toNumber());
+      alltokenidspromise.then((resolvedtokenids) => {
+        const ids = resolvedtokenids.map((id) => id.toNumber());
         setNftIds(ids)
-       await getImage(ids)
+        getImage(ids)
       });
        
-      const tokencountpromise = myNFTContract.balanceOf(address);
-    
-      tokencountpromise.then((balance) => {
-        settokencount(balance.toNumber());
+      tokencountpromise.then((resolvedcount) => {
+        settokencount(resolvedcount.toNumber());
       });
       
-      async function approvednfts(nftIds) {
-        let nfts =[]
-        for (let i = 0; i < tokencount; i++) {
-          if(( await myNFTContract.approved(nftIds[i])).toString()!=='0x0000000000000000000000000000000000000000')
-             nfts[i]=i;
-        }
-        setApprovedNfts(nfts)
-      }
       approvednfts(nftIds)
-     
-    },);
+  });
+ 
+
+
+  async function approvednfts(nftIds) {
+    let nfts =[]
+    for (let i = 0; i < tokencount; i++) {
+      if(( await myNFTContract.approved(nftIds[i])).toString()!=='0x0000000000000000000000000000000000000000')
+         nfts[i]=i;
+    }
+    setApprovedNfts(nfts)
+  }
     async function getImage(ids) {
       let image =[]
       for (let i = 0; i < tokencount; i++) {
@@ -92,7 +100,7 @@ export default function Nfts(){
                borderRadius: '10px',
                boxShadow: 'none',
                fontFamily: 'myCustomFont'
-             }} >Stake</button>
+             }} onClick={() => stake(index)} >Stake</button>
           ) : (
             <button  style={{
               backgroundColor:'red' ,
