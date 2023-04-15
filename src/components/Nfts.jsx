@@ -1,7 +1,6 @@
+import axios from "axios";
 import { ethers } from 'ethers';
 import React, { useContext, useState,useEffect } from 'react';
-import { MyContext } from './MyContext';
-import { Link } from 'react-router-dom';
 import stakingabi from '../assets/stakingabi.json';
 import ABI from '../assets/myNFTContract.json'
 import Moralis from 'moralis';
@@ -18,35 +17,34 @@ export default function Nfts() {
   const [allImagesLoaded, setAllImagesLoaded] = useState(false);
 
 
-  const myNFTContract = new ethers.Contract('0x82E74b814D1152317b9402918cF41BDdF1148599', ABI, (provider.getSigner()));
+  const myNFTContract = new ethers.Contract('0xE5936FeD989bB49237BE59E41f52b007B1C0AD63', ABI, (provider.getSigner()));
   const stakingcontract = new ethers.Contract('0xE0BD2f94907F34D94a09f3820d274a35BE5Eab4a', stakingabi, (provider.getSigner()));
 
   useEffect(() => {
     async function fetchData() {
       const userAddress = await signer.getAddress();
       setAddress(userAddress.toString());
-
-      try {
-        await Moralis.start({
-          apiKey: "BP09vsZ8wakDXpLOhrLtw2J3a19PzYrCQGNGQURY53qfjR65LDoCSrPpvEeFn1CU"
-        });
       
-        const response = await Moralis.EvmApi.nft.getWalletNFTs({
-          "chain": "0x1",
-          "format": "decimal",
-          "tokenAddresses": [
-            "0x82E74b814D1152317b9402918cF41BDdF1148599"
-          ],
-          "mediaItems": false,
-          "address": address,
-        });
-      
-        console.log(response.raw);
-      } catch (e) {
-        console.error(e);
-      }
       const tokenCount = await myNFTContract.balanceOf(userAddress);
       setTokencount(tokenCount.toNumber());
+      try {
+        const response = await axios.get(`https://deep-index.moralis.io/api/v2/${address}/nft/collections`, {
+          params: {
+            chain: "0xaa36a7",
+            format: 'decimal',
+            token_addresses: myNFTContract
+          },
+          headers: {
+            Accept: "application/json",
+            "X-Api-Key": "IrYBgugBfJduG8MzGmsOV3EGekdYm1PzUqUC8gaeUxXHuNOZk09KY3NzDh44GuCn"
+          }
+        });
+        setNftIds(response.data);
+        console.log(nftIds)
+      } catch (error) {
+        console.error(error);
+      }
+    //  setNftIds([1,2,3])
 
       await approvednfts(nftIds);
       await getImage(nftIds);
@@ -73,7 +71,7 @@ export default function Nfts() {
   async function approvednfts(nftIds) {
     let nfts = []
     for (let i = 0; i < tokencount; i++) {
-      if ((await myNFTContract.approved(nftIds[i])).toString() !== '0x0000000000000000000000000000000000000000')
+      if ((await myNFTContract.getApproved(nftIds[i])).toString() !== '0x0000000000000000000000000000000000000000')
         nfts[i] = i;
     }
     setApprovedNfts(nfts)

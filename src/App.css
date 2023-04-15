@@ -143,23 +143,23 @@
   margin-bottom: 30px;
   margin-top: 30px;
 }
-.linktext{
+.linktext {
   margin-left: 5px;
-  color: #fff;
   font-size: 20px;
   font-family: MyCustomFont;
   padding: 5px;
-} 
+}
+.loading{
+  font-size: 45px;
+  font-family: MyCustomFont;
+  color:#fff;
+}
 
-.linkcontainer a:hover, 
+.linkcontainer a:hover,
 .linkcontainer a:focus {
   background-color: #710707;
   border-radius: 10px;
   border: 10px solid #710707;
-  color: #fff;
-  text-decoration: none;
-}
-.linkcontainer a {
   color: #fff;
   text-decoration: none;
 }

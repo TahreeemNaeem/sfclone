@@ -14,7 +14,7 @@ export default function Mainpage() {
   const signer = provider.getSigner()
 
   const StakingContract =  new ethers.Contract('0xE0BD2f94907F34D94a09f3820d274a35BE5Eab4a', ABI, (provider.getSigner()));
-  const myNFTContract =  new ethers.Contract('0x82E74b814D1152317b9402918cF41BDdF1148599', myNFTContrac, (provider.getSigner())); 
+  const myNFTContract =  new ethers.Contract('0xE5936FeD989bB49237BE59E41f52b007B1C0AD63', myNFTContrac, (provider.getSigner())); 
   useEffect(() => {
     const stakecountpromise =  StakingContract.stakeCount();
     const rewardreceivedpromise =  StakingContract.totalRewardReceived();
