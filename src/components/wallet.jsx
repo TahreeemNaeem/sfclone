@@ -1,14 +1,11 @@
-import { ethers } from 'ethers';
 import React, { useContext, useState } from 'react';
 import { MyContext } from './MyContext';
 
 export default function Connect() {
 
-  const {setMyBooleanVariable } = useContext(MyContext);
+  const {setIsConnected } = useContext(MyContext);
   const [connect,setconnect] = useState("Connect Wallet")
   const [buttonColor, setButtonColor] = useState('#499bfa');
-
-  const provider= (new ethers.providers.Web3Provider(window.ethereum));
   
   const connectwallet = async () => {
     setconnect('Connecting!');
@@ -17,7 +14,7 @@ export default function Connect() {
       try {
       const addresses = await window.ethereum.request({ method: 'eth_requestAccounts' })
       if(addresses.length!==0){
-        setMyBooleanVariable(true);
+        setIsConnected(true);
         setconnect('connected')
         setButtonColor('#20c30e')
         }
@@ -47,19 +44,9 @@ export default function Connect() {
         alignItems: 'center',
       }}
     >
-         <button
+         <button className='textstyle buttons'
          style={{
           backgroundColor:buttonColor ,
-           height: '30px',
-           width: 'max-content',
-           color: 'white',
-           fontSize: '20px',
-           border: 'none',
-           cursor: 'pointer',
-           margin: '0 auto',
-           borderRadius: '10px',
-           boxShadow: 'none',
-           fontFamily: 'myCustomFont',
            marginRight:'7px'
          }}
          onClick={() => { connectwallet()}}>

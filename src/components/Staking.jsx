@@ -1,9 +1,7 @@
-import { ethers } from 'ethers';
 import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Staking() {
-  const [display, setDisplay] = useState(true);
   const [selectedLink, setSelectedLink] = useState("");
 
   const handleLinkClick = (link) => {
@@ -15,8 +13,7 @@ export default function Staking() {
   }, []);
 
   const linkStyle = (link) => {
-    return selectedLink === link
-      ? {
+    return selectedLink === link? {
           backgroundColor: '#710707',
           borderRadius: '10px',
           border: '10px solid #710707',
@@ -28,7 +25,7 @@ export default function Staking() {
 
   return (
     <div>
-      <div className="linkcontainer">
+      <div className="linkcontainer textstyle">
         <div className="linktext" onClick={() => handleLinkClick('/Nfts')}>
           <Link to="/Nfts" style={linkStyle('/Nfts')}>
             NFTs

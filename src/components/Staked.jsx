@@ -13,9 +13,9 @@ export default function Staked() {
   const [stakednfts, setStakedNfts] = useState([]);
   const [endTimes, setEndTimes] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const myNFTContract = new ethers.Contract('0x82E74b814D1152317b9402918cF41BDdF1148599', ABI, (signer));
-  const stakingcontract = new ethers.Contract('0xE0BD2f94907F34D94a09f3820d274a35BE5Eab4a', stakingabi, (signer));
+  const[ended,setended] = useState([]);
+  const myNFTContract = new ethers.Contract('0x3F5A0bB76577e96A2cA9b3C8065D97a8A78d5FdB', ABI, (signer));
+  const stakingcontract = new ethers.Contract('0x000e70E0bA6652EED330C4861d4f7000D96D91aB', stakingabi, (signer));
 
   useEffect(() => {
     async function fetchData() {
@@ -36,10 +36,11 @@ export default function Staked() {
     fetchData();
   });
 
-  function gettimeremaining(endTime) {
+  function gettimeremaining(endTime,index) {
     const date = new Date();
     const currenttimestamp = date.getTime() / 1000;
     const timestamp = endTime - currenttimestamp;
+    if(currenttimestamp<endTime){
     const secondsInADay = 86400;
     const secondsInAnHour = 3600;
     const secondsInAMinute = 60;
@@ -49,23 +50,32 @@ export default function Staked() {
     const hours = formatWithLeadingZero(Math.floor((timestamp % secondsInADay) / secondsInAnHour));
     const minutes = formatWithLeadingZero(Math.floor((timestamp % secondsInAnHour) / secondsInAMinute));
     const seconds = formatWithLeadingZero(Math.floor(timestamp % secondsInAMinute));
-
     return `${days}:${hours}:${minutes}:${seconds}`;
+    }
+    else {
+      let stakeended = ended;
+          stakeended.push(index);
+          setended(stakeended)
+    }
+  }
+  async function unStake(index){
+    const id=stakednfts[index];
+    const stake = await myNFTContract.withdrawStake(id);
+    await stake.wait();
   }
 async function getImage(ids) {
     let image =[]
     for (let i = 0; i < ids.length; i++) {
       const img = await myNFTContract.tokenURI(ids[i]);
-      image[i]=img
+      image[i]=img+'.png'
     }
     setImages(image)
   }
  
-
   return (
     <div className="nft-container" style={{ border: '2px solid' }}>
       {loading ? (
-        <div className='loading'>Loading...</div>
+        <div className='loading textstyle'>Loading...</div>
       ) : (
         images.map((image, index) => (
           <div key={index}>
@@ -80,12 +90,11 @@ async function getImage(ids) {
               />
             </div>
             <div>
-              <span style={{
-                color: 'white',
+             { ended.includes(index) ? 
+             <button className='buttons' onClick={()=>unStake(index)}>WithDraw Stake</button>
+              :<span className='textstyle' style={{
                 fontSize: '20px',
-                margin: '0 auto',
-                fontFamily: 'myCustomFont'
-              }}>{gettimeremaining(endTimes[index])}</span>
+              }}>{gettimeremaining(endTimes[index],index)}</span>}
             </div>
           </div>
         ))

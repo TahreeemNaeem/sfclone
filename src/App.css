@@ -34,6 +34,18 @@
     font-size: 14px;
   }
 }
+
+.connect-button{
+  height: 32px;
+  width: auto;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: none;
+  margin-right:7px;
+}
 .connect-button .hover-text {
   display: none;
   font-size: 20px;
@@ -92,26 +104,38 @@
 
 .text {
   text-align: center;
-  width: inherit; /* Adjust the width of the element to fit the content */
-  max-width: 100%; /* Limit the width to the size of the parent element */
-  font-size: calc(0.7rem + 0.5vw); /* Scale the font size based on the viewport width */
-  font-family: MyCustomFont;
-  color: #fff;
-  margin: 0; /* Remove any default margin */
+  width: inherit; 
+  max-width: 100%; 
+  font-size: calc(0.7rem + 0.5vw); 
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
 }
 
-.text1{
+.divtext{
   text-align: center;
   width: 100%;
   font-weight: 500;
   line-height:0;
   margin-top: 0;
 }
+.buttons{
+  background-color:red ;
+  height: 30px;
+  width: max-content;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: none;               
+}
 
+.textstyle{
+  color: #fff;
+  margin: 0 auto;
+  font-family: myCustomFont;
+}
 
 .text-with-line {
     display: inline-flex;
@@ -136,6 +160,21 @@
     margin-top: 0;
     font-size: calc(1.375rem + 1.5vw);
 }
+.address-button {
+        height: 30px;
+        width: 120px;
+        background-color: #499bfa;
+        font-size: 17px;
+        border: none;
+        cursor: pointer;
+        margin: 0 auto;
+        border-radius: 10px;
+        box-shadow: none;
+        margin-right:5px;
+        overflow:hidden;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+}
 .linkcontainer{
   background-color: initial;
   display: flex;
@@ -145,14 +184,10 @@
 }
 .linktext {
   margin-left: 5px;
-  font-size: 20px;
-  font-family: MyCustomFont;
   padding: 5px;
 }
 .loading{
   font-size: 45px;
-  font-family: MyCustomFont;
-  color:#fff;
 }
 
 .linkcontainer a:hover,

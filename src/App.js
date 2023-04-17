@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Navigate,Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route,Routes } from 'react-router-dom';
 import React, { useEffect, useState} from 'react';
 import Connect from './components/wallet';
 import Logo from './components/HeaderLodo'
@@ -15,10 +15,10 @@ import Nfts from './components/Nfts.jsx';
 function App() {
 
   const [Display, setDisplay] = useState();
-  const [ myBooleanVariable,setMyBooleanVariable ] = useState(false);
+  const [ isConnected,setIsConnected ] = useState(false);
 
   window.ethereum.on('disconnect', (error) => {
-    setMyBooleanVariable(false);
+    setIsConnected(false);
  });
 
   window.ethereum.on('chainChanged', async (chainId) => {
@@ -57,14 +57,14 @@ function App() {
    
   },);
   return (
-    <MyContext.Provider value={{ myBooleanVariable,setMyBooleanVariable,Display}} >
+    <MyContext.Provider value={{ isConnected,setIsConnected,Display}} >
       <div className='App'>
         <div className='header'>
           <Logo/>
-          {myBooleanVariable? <Connected/> : <Connect  />}
+          {isConnected? <Connected/> : <Connect  />}
         </div>
         <div className='center-text'>
-          {myBooleanVariable? Display?
+          {isConnected? Display?
        <Router>
       <div>
         < Staking/>
