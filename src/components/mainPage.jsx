@@ -113,14 +113,7 @@ export default function MainPage() {
     </div>
 
         <h1 className='connect-wallet-text textstyle'
-        style={{
-            lineHeight:'auto',
-            fontSize:'calc(1.3rem + 1.2vw)',
-            width:'max-content',
-            height:'max-content',
-            marginTop:'15px'
-            
-        }}>Please Connect Your Wallet</h1>
+        >Please Connect Your Wallet</h1>
     </div>
   );
 }

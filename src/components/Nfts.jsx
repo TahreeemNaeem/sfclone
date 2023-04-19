@@ -15,6 +15,7 @@ export default function Nfts() {
   const [allImagesLoaded, setAllImagesLoaded] = useState(false);
   const [stakeDuration, setstakeDuration] = useState('30');
   const [buttonStatus, setButtonStatus] = useState([]);
+  const [noNfts,setNoNfts]=useState(false);
   
   const myNFTContract = new ethers.Contract(
     '0x3F5A0bB76577e96A2cA9b3C8065D97a8A78d5FdB',
@@ -42,6 +43,9 @@ export default function Nfts() {
     if (address && tokenCount) {
       approvednfts(nftIds);
       getNfts();
+    }
+    if(tokenCount===0){
+      setNoNfts(true);
     }
   }, [address, tokenCount]);
 
@@ -134,14 +138,19 @@ export default function Nfts() {
 
   return (
     <div>
+  {!allImagesLoaded ? (
+        noNfts?
+        <div className="nft-container textstyle"><h1>You Don't own any santafloki NFTs</h1></div>:
+        <div className='loading textstyle'>Loading...</div>
+  ):(
+    <div>
      <div className="textstyle" style={{ display: 'flex',justifyContent:'center' }}>
-      <div  style={{ borderRadius:'5px'}}>
+      <div  style={{ borderTopLeftRadius:'5px',borderBottomLeftRadius:'5px'}}>
         <input
           type="radio"
           id="30days"
           name="days"
           value="30"
-          checked={stakeDuration === '30'}
           defaultChecked={true}
           onChange={handleOptionChange}
         />
@@ -182,10 +191,7 @@ export default function Nfts() {
       </div>
     </div>
     <div className="nft-container" style={{ border: '2px solid' , marginTop:"15px" }}>
-  {!allImagesLoaded ? (
-        <div className='loading textstyle'>Loading...</div>
-  ):(
-      images.map((image, index) => (
+     { images.map((image, index) => (
         <div key={index}>
           <div className='NFT'><img
             src={image}
@@ -215,9 +221,10 @@ export default function Nfts() {
   )}
 </div>
         </div>
-      ))
-      )}
+      ))}
     </div>
+    </div>
+  )}
     </div>
   );
 }

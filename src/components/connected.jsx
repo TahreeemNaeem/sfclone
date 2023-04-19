@@ -49,7 +49,7 @@ export default function Connected() {
           {address}
         </button>
       }
-      <button className='connect-button textstyle'
+      <button className='connect-button textstyle tooltip'
         style={{
           backgroundColor: buttonColor,
         }}
@@ -57,6 +57,9 @@ export default function Connected() {
       >
         <span>{connect}</span>
         {<span className="hover-text">Disconnect!</span>}
+        <span className="tooltiptext"><svg style={{ width: "20", height: "20", alignContent: 'left', verticalAlign: 'middle' }}>
+            <circle cx="10" cy="10" r="5" fill="#1ddb16" />
+          </svg>{address}</span>
       </button>
     </div>
   );
