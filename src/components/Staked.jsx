@@ -4,6 +4,7 @@ import { MyContext } from './MyContext';
 import { Link } from 'react-router-dom';
 import stakingabi from '../assets/stakingabi.json';
 import ABI from '../assets/myNFTContract.json';
+import logo from '../assets/header.22c6a9d7f5e5c2e67ec1.png'
 
 export default function Staked() {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -14,6 +15,10 @@ export default function Staked() {
   const [endTimes, setEndTimes] = useState([]);
   const [loading, setLoading] = useState(true);
   const[ended,setended] = useState([]);
+  const[displayDetail,setDisplayDetail] = useState(false);
+  const [stakeDuration, setStakeDuration] = useState();
+  const [tokenid, setTokenId] = useState();
+  const [ stakeReward, setstakeReward] = useState();
   const myNFTContract = new ethers.Contract('0x3F5A0bB76577e96A2cA9b3C8065D97a8A78d5FdB', ABI, (signer));
   const stakingcontract = new ethers.Contract('0x000e70E0bA6652EED330C4861d4f7000D96D91aB', stakingabi, (signer));
 
@@ -29,7 +34,7 @@ export default function Staked() {
       const resolvedEndTimes = await Promise.all(ids.map((id) => stakingcontract.getEndTime(id)));
       setEndTimes(resolvedEndTimes.map((time) => time.toNumber()));
 
-      await getImage(ids);
+      await getImage(stakednfts);
       setLoading(false); // Set loading to false when all images are fetched
     }
 
@@ -60,8 +65,14 @@ export default function Staked() {
   }
   async function unStake(index){
     const id=stakednfts[index];
-    const stake = await myNFTContract.withdrawStake(id);
+    const stake = await stakingcontract.withdrawStake(id);
     await stake.wait();
+    const nids = await stakingcontract.getStakedTokenIds(address);
+    const ids = nids.map((id) => id.toNumber());
+    setStakedNfts(ids);
+    setDisplayDetail(false)
+    const currentindex= ended.indexOf(index)
+    ended[currentindex]=-1;
   }
 async function getImage(ids) {
     let image =[]
@@ -71,15 +82,43 @@ async function getImage(ids) {
     }
     setImages(image)
   }
+
+  async function stakedNftDetail(index){
+    const id=stakednfts[index]
+    setTokenId(id)
+    const duration = (Math.floor((await stakingcontract.getStakeDuration(id)) / 86400))
+    setStakeDuration(duration)
+    const reward= (Math.ceil((await stakingcontract.stakeRewardCalculator(duration))/10**18))
+    setstakeReward(reward)
+    setDisplayDetail(true)
+  }
  
   return (
+    <div>
+    <div className=' stakedNFTDetails '
+    style={{
+      color:'#fff',
+      fontFamily:'MyCustomFont',
+      fontSize:'12px'
+    }}>
+      {displayDetail?
+      <div>
+      <h1>Token#{tokenid}</h1>
+      <h1>Stake Duration: {stakeDuration} Days</h1>
+      <div className='reward'> <h1>Stake Reward: {stakeReward}</h1>
+      <img style={{marginLeft:'5px',width:'30px',height:'30px'}}  src={logo} alt="Logo" />
+      </div>
+      </div>:
+      <h1 style={{lineHeight:"20px"}}>Click on NFT to view its details!</h1>
+}
+      </div>
     <div className="nft-container" style={{ border: '2px solid' }}>
       {loading ? (
         <div className='loading textstyle'>Loading...</div>
       ) : (
         images.map((image, index) => (
           <div key={index}>
-            <div className='NFT'>
+            <div className='NFT' onClick={()=>stakedNftDetail(index)}>
               <img
                 src={image}
                 alt={`image ${index + 1}`}
@@ -99,6 +138,7 @@ async function getImage(ids) {
           </div>
         ))
       )}
+    </div>
     </div>
   );
 

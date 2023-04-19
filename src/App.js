@@ -11,7 +11,6 @@ import Mainpage from './components/mainPage';
 import Staked from './components/Staked.jsx';
 import Nfts from './components/Nfts.jsx';
 
-
 function App() {
 
   const [Display, setDisplay] = useState();
@@ -25,10 +24,12 @@ function App() {
       if(chainId==='0xaa36a7'){
         setDisplay(true)
         console.log(chainId)
+        window.location.reload();
       }
       else {
         setDisplay(false)
         console.log(chainId+"false")
+        window.location.reload();
       }
   });
 
@@ -69,16 +70,14 @@ function App() {
       <div>
         < Staking/>
         <Routes>
-        <Route path="/Staked" element={<Staked />} />
+          <Route path="/Staked" element={<Staked />} />
           <Route path="/Nfts" element={<Nfts />}  />
         </Routes>
       </div>
     </Router>:
-          <h1 style={{
+          <h1 className='textstyle' style={{
             fontSize:'calc(1.3rem + 1.3vw)',
-            color:'white',
             marginTop:'20px',
-            fontFamily: 'MyCustomFont',
           }}>
             Incorrect Chain Please Connect To Sepolia Testnet
           </h1> : <Mainpage  />}

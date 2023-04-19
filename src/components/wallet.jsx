@@ -46,7 +46,7 @@ export default function Connect() {
     >
          <button className='textstyle buttons'
          style={{
-          backgroundColor:buttonColor ,
+           backgroundColor:buttonColor ,
            marginRight:'7px'
          }}
          onClick={() => { connectwallet()}}>

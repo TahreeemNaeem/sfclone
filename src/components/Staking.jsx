@@ -1,19 +1,25 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Staking() {
-  const [selectedLink, setSelectedLink] = useState("");
+  const [selectedLink, setSelectedLink] = useState("/Nfts");
+  const navigate = useNavigate();
 
   const handleLinkClick = (link) => {
     setSelectedLink(link);
+    navigate(link);
   };
 
   useEffect(() => {
     setSelectedLink(window.location.pathname);
-  }, []);
+    if (!selectedLink || selectedLink === '/'|| window.location.pathname==='/') {
+      handleLinkClick('/Nfts');
+    }
+  },);
 
   const linkStyle = (link) => {
-    return selectedLink === link? {
+    return selectedLink === link
+      ? {
           backgroundColor: '#710707',
           borderRadius: '10px',
           border: '10px solid #710707',

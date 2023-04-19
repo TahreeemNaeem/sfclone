@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ethers } from 'ethers';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import stakingabi from '../assets/stakingabi.json';
 import ABI from '../assets/myNFTContract.json';
 
@@ -13,7 +13,9 @@ export default function Nfts() {
   const [tokenCount, setTokenCount] = useState();
   const [approvedNfts, setApprovedNfts] = useState([]);
   const [allImagesLoaded, setAllImagesLoaded] = useState(false);
-
+  const [stakeDuration, setstakeDuration] = useState('30');
+  const [buttonStatus, setButtonStatus] = useState([]);
+  
   const myNFTContract = new ethers.Contract(
     '0x3F5A0bB76577e96A2cA9b3C8065D97a8A78d5FdB',
     ABI,
@@ -46,22 +48,32 @@ export default function Nfts() {
   async function approve(index) {
     const id = nftIds[index];
     console.log(id);
-    const approved = await myNFTContract.approve(
-      '0x000e70E0bA6652EED330C4861d4f7000D96D91aB',
-      id
-    );
-    await approved.wait();
-    setApprovedNfts([...approvedNfts, index]);
+    setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: "approving" }));
+    try {
+      const approved = await myNFTContract.approve(
+        "0x000e70E0bA6652EED330C4861d4f7000D96D91aB",
+        id
+      );
+      await approved.wait();
+      setApprovedNfts([...approvedNfts, index]);
+    } catch (error) {
+       if(error.code===4001){
+        setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: null }));
+       }
+    }
+    setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: null }));
   }
 
   async function stake(index) {
     const id = nftIds[index];
     console.log(id);
-    const staked = await stakingContract.addStake(id, 1);
+    setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: "staking" }));
+    const staked = await stakingContract.addStake(id, stakeDuration);
     await staked.wait();
     const tokencount = await myNFTContract.balanceOf(address);
-      setTokenCount(tokencount.toNumber());
-      console.log(tokencount)
+    setTokenCount(tokencount.toNumber());
+    console.log(tokencount);
+    setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: null }));
   }
 
   async function getNfts() {
@@ -116,9 +128,60 @@ export default function Nfts() {
     }
     setApprovedNfts(nfts)
   }
+  const handleOptionChange = (event) => {
+    setstakeDuration(event.target.value);
+  };
 
   return (
-    <div className="nft-container" style={{ border: '2px solid' }}>
+    <div>
+     <div className="textstyle" style={{ display: 'flex',justifyContent:'center' }}>
+      <div  style={{ borderRadius:'5px'}}>
+        <input
+          type="radio"
+          id="30days"
+          name="days"
+          value="30"
+          checked={stakeDuration === '30'}
+          defaultChecked={true}
+          onChange={handleOptionChange}
+        />
+        <label
+          htmlFor="30days"
+        >
+          30 Days
+        </label>
+      </div>
+      <div style={{ }}>
+        <input
+          type="radio"
+          id="60days"
+          name="days"
+          value="60"
+          checked={stakeDuration === '60'}
+          onChange={handleOptionChange}
+        />
+        <label
+          htmlFor="60days"          >
+          60 Days
+        </label>
+      </div>
+      <div>
+        <input
+          type="radio"
+          id="90days"
+          name="days"
+          value="90"
+          checked={stakeDuration === '90'}
+          onChange={handleOptionChange}
+        />
+        <label
+          htmlFor="90days"
+        >
+          90 Days
+        </label>
+      </div>
+    </div>
+    <div className="nft-container" style={{ border: '2px solid' , marginTop:"15px" }}>
   {!allImagesLoaded ? (
         <div className='loading textstyle'>Loading...</div>
   ):(
@@ -133,15 +196,28 @@ export default function Nfts() {
           }}
            /></div>
           <div>
-          {approvedNfts.includes(index) ? (
-            <button className="buttons textstyle"  onClick={() => stake(index)} >Stake</button>
-          ) : (
-            <button className="buttons textstyle"  onClick={() => approve(index)}>Approve</button>
-          )}
-           </div>
+  {approvedNfts.includes(index) ? (
+    <button
+      className="buttons textstyle"
+      onClick={() => stake(index)}
+      disabled={buttonStatus[index] === "staking"}
+    >
+      {buttonStatus[index] === "staking" ? "Staking" : "Stake"}
+    </button>
+  ) : (
+    <button
+      className="buttons textstyle"
+      onClick={() => approve(index)}
+      disabled={buttonStatus[index] === "approving"}
+    >
+      {buttonStatus[index] === "approving" ? "Approving" : "Approve"}
+    </button>
+  )}
+</div>
         </div>
       ))
       )}
+    </div>
     </div>
   );
 }
