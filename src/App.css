@@ -29,11 +29,8 @@
     font-size: x-large;
   }
   
-  .text{
-    font-size: x-large; 
-  }
   .connect-wallet-text{
-    font-size:x-large;
+    top: 65%;
   }
   .address-button{
     display:none ;
@@ -78,6 +75,9 @@
   input[type="radio"] + label {
     font-size: x-large;
   }
+  .text-with-line {
+    margin-top: 89px;
+  }
 }
 @media (min-width: 576px) {
   .logotext{
@@ -89,11 +89,9 @@
   button{
     font-size: 20px;
   }
-  .text{
-    font-size: calc(0.7rem + 0.5vw); 
-  }
+  
   .connect-wallet-text{
-    font-size:calc(1.3rem + 1.2vw);
+    top: 70%;
   }
   .tooltiptext{
     display: none;
@@ -101,43 +99,15 @@
   
   
 }
-  .logotext{
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    color:white;
-    font-family:MyCustomFont;
-  }
- .reward{
-  display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 25px;
-    margin-bottom: 10px;
- }
-.connect-button{
-  height: auto;
-  width: auto;
-  border: none;
-  cursor: pointer;
-  margin: 0 auto;
-  border-radius: 10px;
-  box-shadow: none;
-  margin-right:7px;
+/* app.js, headerlogo */
+.textstyle{
+  color: #fff;
+  font-family: myCustomFont;
 }
-.connect-button .hover-text {
-  display: none;
+.textsize{
+  font-size:'35px';
 }
-.connect-button:hover{
-  background-color: #b00617 !important;
-}
-.connect-button:hover .hover-text {
-  display: flex;
-}
-.connect-button:hover span:first-child {
-  display: none;
-}
-
+  
 .header {
   background-color: #7d0e0e;
   color: #333;
@@ -150,50 +120,128 @@
   flex-direction: row;
  
 }
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.logotext{
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  color:white;
+  font-family:MyCustomFont;
+}
+/* mainpage */
+img, svg {
+  vertical-align: middle;
+}
+.text {
+  text-align: center;
+  width: 100%;
+  line-height:0;
+}
+.text-with-line {
+  display: inline-flex;
+  justify-content: space-around;
+  margin-top: 100px;
+  width: 100%;
+}
+
+.line {
+  border: #dfdfdf;
+  background-color: #dfdfdf;
+  border-radius: 200px;
+  border-style: solid;
+  border-width: 3px;
+  min-height: 30px;
+  width: 1px;
+}
 .connect-wallet-text{
-  background-color:#23a45b ;
+  left: 50%;
+  margin-right: -50%;
+  position: absolute;
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  background-color: #23a45b;
   border-radius: 20px;
   padding-left: 10px;
   padding-right: 10px;
-  margin-right: 50%;
-  left:50%;
-  transform: translate(-50%,-50%);
-  top: 65%;
-  position: absolute;
-  width: 550px;
-  height:50px;
-  text-align: center;
-  line-height:auto;
-  width:max-content;
-  height:max-content;
-  margin-top:15px;
 }
-
-.App:before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('./assets/outline.f2cbb8769b4ab9447105.png');
-  background-size: 300px; /* Adjust to your desired size */
-  background-color: #ad0d0d;
-  background-position: left bottom;
-  background-repeat: no-repeat;
-  z-index: -1;
+/* conectwallet */
+.buttons{
+  background-color:red ;
+  height: auto;
+  width: max-content;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: none;               
 }
-
-.text {
-  text-align: center;
-  width: inherit; 
-  max-width: 100%; 
+/* connected */
+.connect-button{
+  height: auto;
+  width: auto;
+  border: none;
+  cursor: pointer;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: none;
+  margin-right:7px;
+  }
+  .connect-button .hover-text {
+  display: none;
+  }
+  .connect-button:hover{
+  background-color: #b00617 !important;
+  }
+  .connect-button:hover .hover-text {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
+  }
+  .connect-button:hover span:first-child {
+  display: none;
+  }
+  .address-button {
+    height: 30px;
+    width: 120px;
+    background-color: #499bfa;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: none;
+    margin-right:5px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
 }
-
+/* staking */
+.linkcontainer{
+  background-color: initial;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+.linktext {
+  margin-left: 5px;
+  padding: 5px;
+}
+.linkcontainer a:focus {
+  background-color: #710707;
+  border-radius: 10px;
+  border: 10px solid #710707;
+  color: #fff;
+  text-decoration: none;
+}
+/* Nfts */
 input[type="radio"]:checked + label {
   background-color: rgb(242, 90, 103);
   cursor: default;
@@ -208,21 +256,6 @@ label{
   height: auto;
   padding: 4px;
 }
-.stakedNFTDetails {
-  background-color: #1069ce84;
-  border: 2px solid #3f88da;
-  border-radius: 15px;
-  margin-bottom: 20px;
-  margin-left: 30%;
-  margin-right: 30%;
-  padding-top: 2px;
-  line-height: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
 
 input{
   display: none;
@@ -230,91 +263,6 @@ input{
 input[type="radio"]:not(:checked) + label:hover {
   color:  rgba(249, 248, 248, 0.652);
   cursor: pointer;
-}
-
-.divtext{
-  text-align: center;
-  width: 100%;
-  font-weight: 500;
-  line-height:0;
-  margin-top: 0;
-}
-.buttons{
-  background-color:red ;
-  height: auto;
-  width: max-content;
-  border: none;
-  cursor: pointer;
-  border-radius: 10px;
-  box-shadow: none;               
-}
-
-.textstyle{
-  color: #fff;
-  margin: 0 auto;
-  font-family: myCustomFont;
-}
-
-.text-with-line {
-    display: inline-flex;
-    justify-content: space-around;
-    margin-top: 100px;
-    width: 100%;
-    min-height: 100%;
-}
-
-.line {
-  border: #dfdfdf;
-  background-color: #dfdfdf;
-  border-radius: 200px;
-  border-style: solid;
-  border-width: 3px;
-  min-height: 100%;
-  width: 1px;
-}
-.h1{
-  font-weight: 500;
-    margin-bottom: 0.5rem;
-    margin-top: 0;
-    font-size: calc(1.375rem + 1.5vw);
-    display: flex;
-    align-items: center;
-}
-.address-button {
-        height: 30px;
-        width: 120px;
-        background-color: #499bfa;
-        font-size: 17px;
-        border: none;
-        cursor: pointer;
-        margin: 0 auto;
-        border-radius: 10px;
-        box-shadow: none;
-        margin-right:5px;
-        overflow:hidden;
-        white-space:nowrap;
-        text-overflow:ellipsis;
-}
-.linkcontainer{
-  background-color: initial;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-  margin-top: 30px;
-}
-.linktext {
-  margin-left: 5px;
-  padding: 5px;
-}
-
-
-.linkcontainer a:hover,
-.linkcontainer a:focus {
-  background-color: #710707;
-  border-radius: 10px;
-  border: 10px solid #710707;
-  color: #fff;
-  text-decoration: none;
 }
 .NFT {
   border: 1px solid #fff;
@@ -335,16 +283,43 @@ input[type="radio"]:not(:checked) + label:hover {
   margin-right: 10%;
   padding: 3% 20px 20px;
 }
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+
+/* staking */
+.reward{
+display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  margin-bottom: 10px;
+}
+
+
+
+.stakedNFTDetails {
+  background-color: #1069ce84;
+  border: 2px solid #3f88da;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  margin-left: 30%;
+  margin-right: 30%;
+  padding-top: 2px;
+  line-height: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  text-align: center;
 }
+
+
+
+.h1{
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  margin-top: 0;
+}
+
+
 
 .App-link {
   color: #61dafb;

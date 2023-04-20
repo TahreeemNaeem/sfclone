@@ -64,7 +64,7 @@ function App() {
           <Logo/>
           {isConnected? <Connected/> : <Connect  />}
         </div>
-        <div className='center-text'>
+        <div>
           {isConnected? Display?
        <Router>
       <div>

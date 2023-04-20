@@ -47,69 +47,66 @@ export default function MainPage() {
 
   return (
     <div>
-      <div className="text-with-line textstyle">
+      <div className="text-with-line">
         <div className="text">
           {loadingStakeCount && loadingReward && loadingTotalSupply ?
-          <div className='loading'>Loading...</div>:
-          <div className="text">
-          <h1>
+          <div className='loading textstyle'>Loading...</div>:
+          <div>
+          <h1 className="textstyle textsize" style={{display:"inline-block"}}>
             {stakeCount} of {totalSupply}
           </h1>
-          <h1
+          <h1 className='textstyle'
             style={{
               fontSize: '20px',
               paddingLeft: '5px',
               display: 'inline-block',
-              paddingTop: '10px',
+
             }}
           >
             NFTs
           </h1>
-          <h1 className="divtext">Staked</h1>
+          <h1 className="textstyle">Staked</h1>
         </div>}
         </div>
         <div className="line"></div>
         <div className="text">
           {loadingStakeCount && loadingReward && loadingTotalSupply ?
-          <div className='loading'>Loading...</div>:
-          <div className="text" >
-          <h1>{((stakeCount * 100) / totalSupply).toFixed(2)} %</h1>
-          <h1
+          <div className='loading textstyle'>Loading...</div>:
+          <div>
+          <h1 className="textstyle textsize"  style={{display:"inline-block"}}>{((stakeCount * 100) / totalSupply).toFixed(2)} %</h1>
+          <h1 className='textstyle'
             style={{
               fontSize: '20px',
               paddingLeft: '5px',
               display: 'inline-block',
-              paddingTop: '10px',
             }}
           >
             of NFTs
           </h1>
-          <h1 className="divtext">Staked</h1>
+          <h1 className="textstyle">Staked</h1>
           </div>}
         </div>
       </div>
       <div
         className="text"
         style={{
-          textAlign: 'center',
-          width: '100%',
           marginTop: '50px',
-          display: 'block',
+          display: 'inline-block',
         }}
       >
-        <div className="textstyle" style={{ display: 'inline-flex' }}>
-          <h1
+        <div>
+          <h1 className='textstyle textsize'
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
+              display: 'inline-block',
             }}
           >
             {rewardReceived/10**18}
-        <img style={{marginLeft:'5px',width:'30px',height:'30px',display:'inline-flex'}}  src={logo} alt="Logo" /></h1>
+        <img style={{marginLeft:'10px',width:'30px',marginBottom:'2px'}}  src={logo} alt="Logo" />
+        </h1>
 
-         <h1 style={{marginLeft:'5px', fontSize:'20px' , display:'inline-flex',alignItems:'center'}}>HoHoHo</h1></div>
+         <h1 className=' textstyle' style={{ fontSize:'20px' , display:'inline-block',paddingLeft:'5px'}}>HoHoHo</h1></div>
      
-      <div><h1 className='divtext textstyle'>Rewarded</h1></div>
+      <div><h1 className=' textstyle'>Rewarded</h1></div>
     </div>
 
         <h1 className='connect-wallet-text textstyle'
