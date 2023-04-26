@@ -18,6 +18,7 @@ export default function Staked() {
   const [tokenid, setTokenId] = useState();
   const [stakeReward, setstakeReward] = useState();
   const [noStakedNfts,setNoStakedNfts] = useState(false);
+  const [loader, setLoader] = useState();
   const myNFTContract = new ethers.Contract('0x3F5A0bB76577e96A2cA9b3C8065D97a8A78d5FdB', ABI, (signer));
   const stakingcontract = new ethers.Contract('0x000e70E0bA6652EED330C4861d4f7000D96D91aB', stakingabi, (signer));
 
@@ -32,20 +33,16 @@ export default function Staked() {
         setStakedNfts(ids);
         const resolvedEndTimes = await Promise.all(ids.map((id) => stakingcontract.getEndTime(id)));
         setEndTimes(resolvedEndTimes.map((time) => time.toNumber()));
-
-        await getImage(stakednfts);
-        setLoading(false); // Set loading to false when all images are fetched
+        await getImage(ids);
       } catch (error) {
         if (error.reason === "No NFT staked!") {
           setNoStakedNfts(true);
         } else {
           console.log(error);
-          setNoStakedNfts(true);
         }
       }
 
     }
-
     fetchData();
   });
 
@@ -86,9 +83,10 @@ async function getImage(ids) {
     let image =[]
     for (let i = 0; i < ids.length; i++) {
       const img = await myNFTContract.tokenURI(ids[i]);
-      image[i]=img+'.png'
+      image[i]=img+'.png';
     }
-    setImages(image)
+    setImages(image);
+    setLoading(false);
   }
 
   async function stakedNftDetail(index){
@@ -143,7 +141,8 @@ async function getImage(ids) {
                          <div>
                           { ended.includes(index) ? 
                           <button className='buttons' onClick={()=>unStake(index)}>WithDraw Stake</button>
-                           :<span className='textstyle' style={{
+                           :loader ?
+                            <div class="loader"></div> : <span className='textstyle' style={{
                              fontSize: '20px',
                            }}>{gettimeremaining(endTimes[index],index)}</span>}
                          </div>
@@ -155,7 +154,5 @@ async function getImage(ids) {
        }
     </div>
   );
-
-
 }
   
