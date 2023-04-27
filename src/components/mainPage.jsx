@@ -43,7 +43,7 @@ export default function MainPage() {
     .catch((error) => {
       console.log(error);
     });
-  },);
+  });
 
   return (
     <div>
@@ -87,6 +87,8 @@ export default function MainPage() {
           </div>}
         </div>
       </div>
+      {loadingStakeCount && loadingReward && loadingTotalSupply ?
+          <div className='loading textstyle'>Loading...</div>:
       <div
         className="text"
         style={{
@@ -107,7 +109,7 @@ export default function MainPage() {
          <h1 className=' textstyle' style={{ fontSize:'20px' , display:'inline-block',paddingLeft:'5px'}}>HoHoHo</h1></div>
      
       <div><h1 className=' textstyle'>Rewarded</h1></div>
-    </div>
+    </div>}
 
         <h1 className='connect-wallet-text textstyle'
         >Please Connect Your Wallet</h1>

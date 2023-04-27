@@ -37,10 +37,12 @@ function App() {
     if(chainId==='0xaa36a7'){
       setDisplay(true)
       console.log(chainId)
+      window.location.reload();
     }
     else {
       setDisplay(false)
       console.log(chainId+"false")
+      window.location.reload();
     }
 });
 

@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import stakingabi from '../assets/stakingabi.json';
 import ABI from '../assets/myNFTContract.json';
 import logo from '../assets/header.22c6a9d7f5e5c2e67ec1.png'
@@ -18,16 +18,16 @@ export default function Staked() {
   const [tokenid, setTokenId] = useState();
   const [stakeReward, setstakeReward] = useState();
   const [noStakedNfts,setNoStakedNfts] = useState(false);
-  const [loader, setLoader] = useState();
+  const [loader, setLoader] = useState(true);
+  const [time, setTime] = useState([]);
   const myNFTContract = new ethers.Contract('0x3F5A0bB76577e96A2cA9b3C8065D97a8A78d5FdB', ABI, (signer));
   const stakingcontract = new ethers.Contract('0x000e70E0bA6652EED330C4861d4f7000D96D91aB', stakingabi, (signer));
 
   useEffect(() => {
     async function fetchData() {
-      const userAddress = await signer.getAddress();
-      setAddress(userAddress.toString());
-
       try {
+        const userAddress = await signer.getAddress();
+        setAddress(userAddress.toString());
         const nids = await stakingcontract.getStakedTokenIds(userAddress);
         const ids = nids.map((id) => id.toNumber());
         setStakedNfts(ids);
@@ -41,32 +41,35 @@ export default function Staked() {
           console.log(error);
         }
       }
-
     }
     fetchData();
   });
 
-  function gettimeremaining(endTime,index) {
+  function gettimeremaining() {
     const date = new Date();
     const currenttimestamp = date.getTime() / 1000;
+    let times =[];
+    for(let i=0;i<stakednfts.length;i++){
+    let endTime=endTimes[i];
     const timestamp = endTime - currenttimestamp;
     if(currenttimestamp<endTime){
-    const secondsInADay = 86400;
-    const secondsInAnHour = 3600;
-    const secondsInAMinute = 60;
-    const formatWithLeadingZero = (number) => number.toString().padStart(2, '0');
-
-    const days = formatWithLeadingZero(Math.floor(timestamp / secondsInADay));
-    const hours = formatWithLeadingZero(Math.floor((timestamp % secondsInADay) / secondsInAnHour));
-    const minutes = formatWithLeadingZero(Math.floor((timestamp % secondsInAnHour) / secondsInAMinute));
-    const seconds = formatWithLeadingZero(Math.floor(timestamp % secondsInAMinute));
-    return `${days}:${hours}:${minutes}:${seconds}`;
+      const secondsInADay = 86400;
+      const secondsInAnHour = 3600;
+      const secondsInAMinute = 60;
+      const formatWithLeadingZero = (number) => number.toString().padStart(2,'0');
+      const days = formatWithLeadingZero(Math.floor(timestamp / secondsInADay));
+      const hours = formatWithLeadingZero(Math.floor((timestamp % secondsInADay) / secondsInAnHour));
+      const minutes = formatWithLeadingZero(Math.floor((timestamp % secondsInAnHour) / secondsInAMinute));
+      const seconds = formatWithLeadingZero(Math.floor(timestamp % secondsInAMinute));
+      times[i]=`${days}:${hours}:${minutes}:${seconds}`;
     }
     else {
       let stakeended = ended;
-          stakeended.push(index);
-          setended(stakeended)
+      stakeended.push(i);
+      setended(stakeended)
     }
+   }
+   setTime(times);
   }
   async function unStake(index){
     const id=stakednfts[index];
@@ -75,28 +78,32 @@ export default function Staked() {
     const nids = await stakingcontract.getStakedTokenIds(address);
     const ids = nids.map((id) => id.toNumber());
     setStakedNfts(ids);
-    setDisplayDetail(false)
-    const currentindex= ended.indexOf(index)
+    setDisplayDetail(false);
+    const currentindex= ended.indexOf(index);
     ended[currentindex]=-1;
   }
 async function getImage(ids) {
-    let image =[]
+    let image =[];
     for (let i = 0; i < ids.length; i++) {
       const img = await myNFTContract.tokenURI(ids[i]);
       image[i]=img+'.png';
     }
     setImages(image);
     setLoading(false);
+    if(endTimes.length===ids.length){
+      gettimeremaining();
+      setLoader(false)
+    }
   }
 
   async function stakedNftDetail(index){
-    const id=stakednfts[index]
-    setTokenId(id)
-    const duration = (Math.floor((await stakingcontract.getStakeDuration(id)) / 86400))
-    setStakeDuration(duration)
-    const reward= (Math.ceil((await stakingcontract.stakeRewardCalculator(duration))/10**18))
-    setstakeReward(reward)
-    setDisplayDetail(true)
+    const id=stakednfts[index];
+    setTokenId(id);
+    const duration = (Math.floor((await stakingcontract.getStakeDuration(id)) / 86400));
+    setStakeDuration(duration);
+    const reward= (Math.ceil((await stakingcontract.stakeRewardCalculator(duration))/10**18));
+    setstakeReward(reward);
+    setDisplayDetail(true);
   }
  
   return (
@@ -142,9 +149,10 @@ async function getImage(ids) {
                           { ended.includes(index) ? 
                           <button className='buttons' onClick={()=>unStake(index)}>WithDraw Stake</button>
                            :loader ?
-                            <div class="loader"></div> : <span className='textstyle' style={{
+                           <div className="loader"></div> :
+                           <span className='textstyle' style={{
                              fontSize: '20px',
-                           }}>{gettimeremaining(endTimes[index],index)}</span>}
+                           }}>{time[index]}</span>}
                          </div>
                        </div>
                      ))}
