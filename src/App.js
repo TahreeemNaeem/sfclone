@@ -8,8 +8,8 @@ import { MyContext } from './components/MyContext';
 import Connected from './components/connected';
 import Staking from './components/Staking';
 import Mainpage from './components/mainPage';
-import Staked from './components/Staked.jsx';
-import Nfts from './components/Nfts.jsx';
+import Staked from './components/StakedNfts.jsx';
+import Nfts from './components/NftsList.jsx';
 
 function App() {
 

@@ -1,23 +1,17 @@
-import axios from "axios";
 import { ethers } from 'ethers';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useContext} from 'react';
 import stakingabi from '../assets/stakingabi.json';
 import ABI from '../assets/myNFTContract.json';
+import {NftDataContext} from './Nftcontext';
 
-export default function Nfts() {
+export default function Nft() {
+  
   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
- // const [nftIds, setNftIds] = useState([]);
-//  const [images, setImages] = useState([]);
-  const [address, setAddress] = useState();
-  const [tokenCount, setTokenCount] = useState();
+  const {id,Image,duration,setTokenCount } = useContext(NftDataContext);
   const [approvedNfts, setApprovedNfts] = useState();
- // const [allImagesLoaded, setAllImagesLoaded] = useState(false);
-  const [stakeDuration, setstakeDuration] = useState('30');
-  const [buttonStatus, setButtonStatus] = useState();
-  //const [noNfts, setNoNfts] = useState(false);
+  const [buttonStatus, setButtonStatus] = useState("Approve");
+  const [address, setAddress] = useState();
   const [loader, setLoader] = useState(true);
-
 
   const myNFTContract = new ethers.Contract(
     '0x3F5A0bB76577e96A2cA9b3C8065D97a8A78d5FdB',
@@ -32,147 +26,105 @@ export default function Nfts() {
 
   useEffect(() => {
     async function fetchData() {
-      const userAddress = await signer.getAddress();
-      setAddress(userAddress.toString());
-      const tokencount = await myNFTContract.balanceOf(userAddress);
-      setTokenCount(tokencount.toNumber());
-    }
+    const userAddress = await provider.getSigner().getAddress();
+    setAddress(userAddress.toString());}
     fetchData();
-  }, [nftIds, images, tokenCount, address, buttonStatus]);
+    approvednfts(id);
+  },[address]);
 
-  async function approve(index) {
-    const id = nftIds[index];
+  async function approve(id) {
     console.log(id);
-    setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: "approving" }));
+    setButtonStatus("Approving...");
     try {
       const approved = await myNFTContract.approve(
         "0x000e70E0bA6652EED330C4861d4f7000D96D91aB",
         id
       );
-      setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: "app" }));
+      setButtonStatus("load");
       await approved.wait();
-      setApprovedNfts([...approvedNfts, index]);
-      setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: null }));
+      setApprovedNfts(true);
+      setButtonStatus("Stake");
     } catch (error) {
        if(error.code==='ACTION_REJECTED'){
         console.log("failed")
-        setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: "failed" }));
+        setButtonStatus("Failed!");
+        resetButtonStatus();
        }
-      //setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: null }));
+       console.log(error);
     }
   }
 
-  async function stake(index) {
-    const id = nftIds[index];
-    setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: "staking" }));
+  async function stake(id) {
+    setButtonStatus( "Staking..." );
     try {
-      const staked = await stakingContract.addStake(id, stakeDuration);
-      setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: "load" }));
-    await staked.wait();
-    const tokencount = await myNFTContract.balanceOf(address);
-    setTokenCount(tokencount.toNumber());
-    setLoader(true)
-    getNfts()
-    setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: null }));
+      const staked = await stakingContract.addStake(id, duration);
+      setButtonStatus( "load");
+      await staked.wait();
+      const tokencount = await myNFTContract.balanceOf(address);
+      setTokenCount(tokencount.toNumber());
+      console.log('done')
     } catch (error) {
-      setButtonStatus((prevStatus) => ({ ...prevStatus, [index]: null }));
+      if(error.code==='ACTION_REJECTED'){
+      setButtonStatus("Failed!");
+      resetButtonStatus();
+      }
+      console.log(error)
     }
-    
   }
 
   async function approvednfts(nftIds) {
-      if ((await myNFTContract.getApproved(nftIds)).toString() === '0x000e70E0bA6652EED330C4861d4f7000D96D91aB')
-        nfts[i] = i;
-      setApprovedNfts(true)
+      if ((await myNFTContract.getApproved(nftIds)).toString() === '0x000e70E0bA6652EED330C4861d4f7000D96D91aB'){
+          setApprovedNfts(true)
+          setButtonStatus("Stake")
+      }
       setLoader(false)
   }
-  const handleOptionChange = (event) => {
-    setstakeDuration(event.target.value);
+  const resetButtonStatus = () => {
+    setTimeout(() => {
+      if (!approvedNfts) {
+        setButtonStatus("Approve");
+      } else {
+        setButtonStatus("Stake");
+      }
+    }, 2000);
   };
+
   return (
     <div>
-        <div>
-          <div className="textstyle" style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{ borderTopLeftRadius: '5px', borderBottomLeftRadius: '5px' }}>
-              <input
-                type="radio"
-                id="30days"
-                name="days"
-                value="30"
-                defaultChecked={true}
-                onChange={handleOptionChange}
-              />
-              <label
-                htmlFor="30days"
-              >
-                30 Days
-              </label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                id="60days"
-                name="days"
-                value="60"
-                checked={stakeDuration === '60'}
-                onChange={handleOptionChange}
-              />
-              <label
-                htmlFor="60days"          >
-                60 Days
-              </label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                id="90days"
-                name="days"
-                value="90"
-                checked={stakeDuration === '90'}
-                onChange={handleOptionChange}
-              />
-              <label
-                htmlFor="90days"
-              >
-                90 Days
-              </label>
-            </div>
-          </div>
-          <div className="nft-container" style={{ border: '2px solid', marginTop: "15px" }}>
-            {images.map((image, index) => (
-              <div key={index}>
-               
-                <div>
-
-                  {loader ?
+        <div className='NFT'>
+                  <img
+                  src={Image}
+                  alt={`image ${1}`}
+                  style={{
+                    height: '160px',
+                    width: '160px'
+                  }}
+                />
+                </div>
+           {loader ?
                     <div className="loader"></div> :
                     (approvedNfts ? (
-                      buttonStatus === "sta" ?
+                      buttonStatus === "load" ?
                       <div className="loader"></div> :
                       <button
                         style={{ backgroundColor: '#499bfa' }}
                         className="buttons textstyle"
-                        onClick={() => stake()}
+                        onClick={() => stake(id)}
                         disabled={buttonStatus === "staking"}
                       >
-                        {buttonStatus[index] === "staking" ? "Staking..." : "Stake"}
+                        {buttonStatus}
                       </button>
                     ) : (
-                      buttonStatus === "app" ?
+                      buttonStatus === "load" ?
                       <div className="loader"></div> :
                       <button
                         className="buttons textstyle"
-                        onClick={() => approve()}
+                        onClick={() => approve(id)}
                         disabled={buttonStatus === "approving"}
                       >
-                        {buttonStatus=== "failed"? "Failed!" : buttonStatus === "approving" ? "Approving..." : "Approve"}
+                        {buttonStatus}
                       </button>
                     ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
     </div>
   );
 }

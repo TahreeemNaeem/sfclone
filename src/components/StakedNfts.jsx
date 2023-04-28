@@ -1,8 +1,27 @@
 import { ethers } from 'ethers';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef,useCallback } from 'react';
 import stakingabi from '../assets/stakingabi.json';
 import ABI from '../assets/myNFTContract.json';
 import logo from '../assets/header.22c6a9d7f5e5c2e67ec1.png'
+
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
 
 export default function Staked() {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -20,6 +39,7 @@ export default function Staked() {
   const [noStakedNfts,setNoStakedNfts] = useState(false);
   const [loader, setLoader] = useState(true);
   const [time, setTime] = useState([]);
+
   const myNFTContract = new ethers.Contract('0x3F5A0bB76577e96A2cA9b3C8065D97a8A78d5FdB', ABI, (signer));
   const stakingcontract = new ethers.Contract('0x000e70E0bA6652EED330C4861d4f7000D96D91aB', stakingabi, (signer));
 
@@ -43,7 +63,15 @@ export default function Staked() {
       }
     }
     fetchData();
-  });
+  },[stakednfts]);
+  const updateRemainingTime = useCallback(() => {
+    if(images.length===stakednfts.length&&(endTimes.length===stakednfts.length)){
+      gettimeremaining();
+      setLoader(false)
+    }
+  }, [stakednfts, endTimes,images]);
+
+  useInterval(updateRemainingTime, 1000);
 
   function gettimeremaining() {
     const date = new Date();
@@ -90,10 +118,7 @@ async function getImage(ids) {
     }
     setImages(image);
     setLoading(false);
-    if(endTimes.length===ids.length){
-      gettimeremaining();
-      setLoader(false)
-    }
+  
   }
 
   async function stakedNftDetail(index){
