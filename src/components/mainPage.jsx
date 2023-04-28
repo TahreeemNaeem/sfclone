@@ -16,12 +16,12 @@ export default function MainPage() {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
   const StakingContract = new ethers.Contract(
-    '0x000e70E0bA6652EED330C4861d4f7000D96D91aB',
+    '0xa2402b09fA456D7F39F0f3dF1a6b9CFa50783556',
     ABI,
     provider.getSigner()
   );
   const myNFTContractInstance = new ethers.Contract(
-    '0x3F5A0bB76577e96A2cA9b3C8065D97a8A78d5FdB',
+    '0x57c02EA259CE9a4b1030CBe21A1F1f215E5A1276',
     myNFTContract,
     provider.getSigner()
   );

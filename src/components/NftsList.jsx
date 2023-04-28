@@ -17,7 +17,7 @@ export default function Nfts() {
   const [noNfts, setNoNfts] = useState(false);
   
   const myNFTContract = new ethers.Contract(
-    '0x3F5A0bB76577e96A2cA9b3C8065D97a8A78d5FdB',
+    '0x57c02EA259CE9a4b1030CBe21A1F1f215E5A1276',
     ABI,
     provider.getSigner()
   );
@@ -30,6 +30,9 @@ export default function Nfts() {
       setTokenCount(tokencount.toNumber());
     }
   fetchData();
+    if (tokenCount === 0) {
+    setNoNfts(true);
+  }
     if (address&&tokenCount) {
       getNfts();
     }
@@ -48,7 +51,7 @@ export default function Nfts() {
             chain: "0xaa36a7",
             format: 'decimal',
             token_addresses:
-              '0x3F5A0bB76577e96A2cA9b3C8065D97a8A78d5FdB',
+              '0x57c02EA259CE9a4b1030CBe21A1F1f215E5A1276',
           },
           headers: {
             Accept: "application/json",
@@ -58,15 +61,18 @@ export default function Nfts() {
         }
       );
       const nftData = response.data.result;
+      console.log(nftData)
       const tokenIds = [];
       const tokenUris = [];
       let loadedImages = 0;
       for (const nft of nftData) {
-        console.log(`Token ID: ${nft.token_id}, Token URI: ${nft.token_uri}`);
-        tokenUris.push(nft.token_uri + '.png');
+        let metadata =nft.metadata;
+        let img =JSON.parse(metadata)['image']
+        console.log(img);
+        tokenUris.push(img);
         tokenIds.push(nft.token_id);
         const tempImage = new Image();
-        tempImage.src = nft.token_uri + '.png';
+        tempImage.src = img;
         tempImage.onload = () => {
           loadedImages++;
           if (loadedImages === tokenCount) {

@@ -25,14 +25,15 @@ function useInterval(callback, delay) {
 
 export default function Staked() {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  var uriPrefix = 'https://santafloki.mypinata.cloud/ipfs'
   const signer = provider.getSigner();
   const [images, setImages] = useState([]);
   const [address, setAddress] = useState();
   const [stakednfts, setStakedNfts] = useState([]);
   const [endTimes, setEndTimes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const[ended,setended] = useState([]);
-  const[displayDetail,setDisplayDetail] = useState(false);
+  const [ended,setended] = useState([]);
+  const [displayDetail,setDisplayDetail] = useState(false);
   const [stakeDuration, setStakeDuration] = useState();
   const [tokenid, setTokenId] = useState();
   const [stakeReward, setstakeReward] = useState();
@@ -40,8 +41,8 @@ export default function Staked() {
   const [loader, setLoader] = useState(true);
   const [time, setTime] = useState([]);
 
-  const myNFTContract = new ethers.Contract('0x3F5A0bB76577e96A2cA9b3C8065D97a8A78d5FdB', ABI, (signer));
-  const stakingcontract = new ethers.Contract('0x000e70E0bA6652EED330C4861d4f7000D96D91aB', stakingabi, (signer));
+  const myNFTContract = new ethers.Contract('0x57c02EA259CE9a4b1030CBe21A1F1f215E5A1276', ABI, (signer));
+  const stakingcontract = new ethers.Contract('0xa2402b09fA456D7F39F0f3dF1a6b9CFa50783556', stakingabi, (signer));
 
   useEffect(() => {
     async function fetchData() {
@@ -113,12 +114,20 @@ export default function Staked() {
 async function getImage(ids) {
     let image =[];
     for (let i = 0; i < ids.length; i++) {
-      const img = await myNFTContract.tokenURI(ids[i]);
-      image[i]=img+'.png';
+      var URI = await myNFTContract.tokenURI(ids[i]);
+      fetch(URI)
+      .then(res => res.json())
+         .then(async metadata =>{
+          const img =metadata.image
+          //let splitUri = img.split('ipfs')
+          //img=uriPrefix+splitUri[2]
+          console.log(img)
+          image[i]=img;
+            })
+           .catch(err => { throw err });
     }
     setImages(image);
-    setLoading(false);
-  
+    setLoading(false);  
   }
 
   async function stakedNftDetail(index){

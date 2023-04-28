@@ -7,19 +7,19 @@ import {NftDataContext} from './Nftcontext';
 export default function Nft() {
   
   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const {id,Image,duration,setTokenCount } = useContext(NftDataContext);
+  const {id,Image,duration,tokenCount,setTokenCount } = useContext(NftDataContext);
   const [approvedNfts, setApprovedNfts] = useState();
   const [buttonStatus, setButtonStatus] = useState("Approve");
   const [address, setAddress] = useState();
   const [loader, setLoader] = useState(true);
 
   const myNFTContract = new ethers.Contract(
-    '0x3F5A0bB76577e96A2cA9b3C8065D97a8A78d5FdB',
+    '0x57c02EA259CE9a4b1030CBe21A1F1f215E5A1276',
     ABI,
     provider.getSigner()
   );
   const stakingContract = new ethers.Contract(
-    '0x000e70E0bA6652EED330C4861d4f7000D96D91aB',
+    '0xa2402b09fA456D7F39F0f3dF1a6b9CFa50783556',
     stakingabi,
     provider.getSigner()
   );
@@ -30,14 +30,14 @@ export default function Nft() {
     setAddress(userAddress.toString());}
     fetchData();
     approvednfts(id);
-  },[address]);
+  },[address,tokenCount]);
 
   async function approve(id) {
     console.log(id);
     setButtonStatus("Approving...");
     try {
       const approved = await myNFTContract.approve(
-        "0x000e70E0bA6652EED330C4861d4f7000D96D91aB",
+        "0xa2402b09fA456D7F39F0f3dF1a6b9CFa50783556",
         id
       );
       setButtonStatus("load");
@@ -51,12 +51,15 @@ export default function Nft() {
         resetButtonStatus();
        }
        console.log(error);
+       setButtonStatus("Failed!");
+        resetButtonStatus();
     }
   }
 
   async function stake(id) {
     setButtonStatus( "Staking..." );
     try {
+      console.log(id,duration)
       const staked = await stakingContract.addStake(id, duration);
       setButtonStatus( "load");
       await staked.wait();
@@ -69,11 +72,13 @@ export default function Nft() {
       resetButtonStatus();
       }
       console.log(error)
+      setButtonStatus("Failed!");
+        resetButtonStatus();
     }
   }
 
   async function approvednfts(nftIds) {
-      if ((await myNFTContract.getApproved(nftIds)).toString() === '0x000e70E0bA6652EED330C4861d4f7000D96D91aB'){
+      if ((await myNFTContract.getApproved(nftIds)).toString() === '0xa2402b09fA456D7F39F0f3dF1a6b9CFa50783556'){
           setApprovedNfts(true)
           setButtonStatus("Stake")
       }
