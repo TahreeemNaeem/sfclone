@@ -63,7 +63,7 @@ export default function Staked() {
       }
     }
     fetchData();
-  },[stakednfts]);
+  },[]);
   const updateRemainingTime = useCallback(() => {
     if(images.length===stakednfts.length&&(endTimes.length===stakednfts.length)){
       gettimeremaining();
